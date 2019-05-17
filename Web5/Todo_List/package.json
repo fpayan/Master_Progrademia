@@ -1,0 +1,51 @@
+{
+  "name": "todo_list",
+  "version": "1.0.0",
+  "description": "Examples of Todo-List with the use of webpack 4, bootstrap 4 and jQuery.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack --env=DEVELOPMENT --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fpayan/Master_Progrademia/tree/master/Web5"
+  },
+  "keywords": [
+    "todo",
+    "todolist",
+    "webpack",
+    "bootstrap"
+  ],
+  "author": "Francisco Payán <fpayan.calero@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^7.2.5",
+    "browser-sync": "^2.26.5",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "html-webpack-plugin": "^3.2.0",
+    "html-loader": "^0.5.5",
+    "clean-webpack-plugin": "^2.0.2",
+    "copy-webpack-plugin": "^5.0.3",
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.1",
+    "exports-loader": "^0.6.4",
+    "node-sass": "^4.7.2",
+    "postcss-loader": "^2.0.10",
+    "prettier": "^1.17.1",
+    "prettier-package-json": "^2.1.0",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.20.1",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-middleware": "^3.7.0",
+    "webpack-dev-server": "^3.3.1",
+    "webpack-hot-middleware": "^2.25.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.12.9"
+  }
+}
