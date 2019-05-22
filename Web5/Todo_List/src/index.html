@@ -6,8 +6,155 @@
   <title></title>
 </head>
 <body>
-  <h1 class="display-5">Todo List By Francisco Payán</h1>
-  <button id="btnTest" type="button" class="btn btn-primary">Esto funciona</button>
+  <!-- Title -->
+  <div class="container justify-content-md-center text-center" style="padding-top:1em;">
+    <h1 class="display-5 ">Todo List By Francisco Payán</h1>
+  </div>
+  
+  <!--  -->
+  <div class="separator"></div>
+  <!--  -->
+
+  <!-- Title Task Info -->
+  <div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-sm-1 col-md-10 border border-info rounded">
+        <p class="text-center font-weight-bold text-info">Añadir Tarea</p>
+      </div>
+    </div>
+  </div>
+  <!--  -->
+  <div class="separator"></div>
+  <!--  -->
+  <div class="container justify-content-md-center">
+    <div class="row justify-content-md-center">
+      <div class="col">
+        <form id="formAddTaskText" action="">
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="titleTask">Tarea a añadir</label>
+                    <input type="text" name="titleTask" id="titleTask" class="form-control" placeholder="Texto tarea" aria-describedby="helpId">
+                  </div>
+                  <div class="form-group col">
+                      <button id="btnAddTaskToList" class="btn btn-outline-primary" type="submit" class="btn btn-default">
+                          <i class="fas fa-plus-square fa-2x"></i>
+                      </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!--  -->
+  <div class="separator"></div>
+  <!--  -->
+
+  <div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-sm-1 col-md-10 border border-info rounded">
+        <p class="text-center font-weight-bold text-info">Lista de Tareas</p>
+      </div>
+    </div>
+  </div>
+
+<!--  -->
+<div class="separator"></div>
+<!--  -->
+
+<div id="containerTaskCreated" class="container containerTaskCreated">
+    <div class="row">
+      <!--  #sectionTaskStart  -->
+      <div id="sectionTaskStart" class="col">
+        <div class="alert alert-primary" role="alert">
+            Tareas nuevas. 
+            <div class="float-right">
+              <span><i class="far fa-check-circle fa-lg text-success"></i></span>
+            </div>
+        </div>
+        <ul id="listStartTasks"class="list-group rounded-top">
+          <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+            Cras justo odio
+            <span class="badge badge-primary badge-pill">14</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Dapibus ac facilisis in
+            <span class="badge badge-primary badge-pill">2</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Morbi leo risus
+            <span class="badge badge-primary badge-pill">1</span>
+          </li> -->
+        </ul>
+      </div>
+      <!--  /#sectionTaskStart  -->
+      <!--  -->
+      <!--  #sectionTaskMiddleware  -->
+      <div id="sectionTaskMiddleware" class="col">
+        <div class="alert alert-primary" role="alert">
+            Tareas en ejecuci&oacute;n.
+            <div class="float-right">
+              <span><i class="far fa-check-circle fa-lg text-warning"></i></span>
+            </div>
+        </div>
+        <ul id="listMiddlewareTasks"class="list-group rounded-top">
+          <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+            Cras justo odio
+            <span class="badge badge-primary badge-pill">14</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Dapibus ac facilisis in
+            <span class="badge badge-primary badge-pill">2</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Morbi leo risus
+            <span class="badge badge-primary badge-pill">1</span>
+          </li> -->
+        </ul>
+      </div>
+      <!--  #sectionTaskMiddleware  -->
+      <!--  -->
+      <!--  #sectionTaskEnd  -->
+      <div id="sectionTaskEnd" class="col">
+        <div class="alert alert-primary" role="alert">
+            Tareas finalizadas.
+            <div class="float-right">
+              <span><i class="far fa-check-circle fa-lg text-danger"></i></span>
+            </div>
+        </div>
+        <ul id="listEndTasks" class="list-group rounded-top">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Cras justo odio
+            <button type="button" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Dapibus ac facilisis in
+            <span><i class="far fa-check-circle fa-lg text-danger"></i></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Morbi leo risus
+            <span class="badge badge-primary badge-pill">1</span>
+          </li>
+        </ul>
+      </div> 
+      <!--  #sectionTaskEnd  -->
+      <!--  -->
+    </div>
+    <!-- ./row -->
+</div>
+<!-- ./container  ./containerTaskCreated -->
+<!--  -->
+<div class="separator"></div>
+<!--  -->
+
+
+
+
   <script src="./main.bundle.js"></script>
 </body>
 </html>

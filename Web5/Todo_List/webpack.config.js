@@ -59,7 +59,9 @@ module.exports = {
           },
           {
             // Loads a SASS/SCSS file and compiles it to CSS
-            loader: 'sass-loader'
+            loader: 'sass-loader', options: {
+              sourceMap: false
+            }
           },
           
         ],
@@ -131,7 +133,7 @@ module.exports = {
       favicon: path.resolve(__dirname, 'src/images/icon.ico'),
       filename: 'index.html',
       hash: true,
-      //inject: 'body',
+      inject: false,
       minify: !IS_DEV && {
         collapseWhitespace: true,
         preserveLineBreaks: true,
