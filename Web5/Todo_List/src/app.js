@@ -335,7 +335,7 @@ $('document').ready(function(){
                 const data = {
                     createBy: 'Francisco Payán',
                     description: 'Example of <Todo>',
-                    showPage: 'https://algo'
+                    showPage: 'https://github.com/fpayan'
                 }
                 return data;
             },
