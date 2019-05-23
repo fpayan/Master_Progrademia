@@ -1,6 +1,6 @@
 # Master_Progrademia
 
-### Indice of Master.
+### Index of Master.
 
 1. JavaSE
 2. JavaEE
