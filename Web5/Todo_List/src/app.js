@@ -223,8 +223,6 @@ $('document').ready(function(){
                         // Load all item of list initial.
                         $('#listStartTasks li').each((index, element)=>{
                             storeInitialTask[index]= element.childNodes[0].data.trim();
-                            console.log('Iterator 3:' + index, element.childNodes[0].data.trim());
-                            console.log(JSON.stringify( storeInitialTask ) );
                         });
                         // Save object into localStorage
                         saveTask( TASK_INITIAL , storeInitialTask );
@@ -240,8 +238,6 @@ $('document').ready(function(){
                         //
                         $('#listStartTasks li').each((index, element)=>{
                             storeInitialTask[index]= element.childNodes[0].data.trim();
-                            console.log('Iterator 2:' + index, element.childNodes[0].data.trim());
-                            console.log(JSON.stringify( storeInitialTask ) );
                         });
                         // Save object into localStorage
                         saveTask( TASK_INITIAL , storeInitialTask );
@@ -264,13 +260,11 @@ $('document').ready(function(){
                         // Add list of <li>
                         $('#listMiddlewareTasks li').each((index, element)=>{
                             storeMiddleware[index]= element.childNodes[0].data.trim();
-                            console.log('Iterator 5:' + index, element.childNodes[0].data.trim());
-                            console.log(JSON.stringify( storeMiddleware ) );
                         });
                         // Save object into localStorage
                         saveTask( TASK_RUNNING , storeMiddleware );
                         // Test don't show
-                        console.log('Midd_Store recive :' + JSON.stringify(storeMiddleware));
+                        // console.log('Midd_Store recive :' + JSON.stringify(storeMiddleware));
                         
                     },
                     stop:(event, ui)=>{
@@ -278,13 +272,11 @@ $('document').ready(function(){
                         // Add list of <li>
                         $('#listMiddlewareTasks li').each((index, element)=>{
                             storeMiddleware[index]= element.childNodes[0].data.trim();
-                            console.log('Iterator 6:' + index, element.childNodes[0].data.trim());
-                            console.log(JSON.stringify( storeMiddleware ) );
                         });
                         // Save object into localStorage
                         saveTask( TASK_RUNNING , storeMiddleware );
                         // Test don't show
-                        console.log('Midd_Store Stop -> :' + JSON.stringify(storeMiddleware));
+                        // console.log('Midd_Store Stop -> :' + JSON.stringify(storeMiddleware));
         
                     },
                     remove:(event, ui)=>{
@@ -295,8 +287,6 @@ $('document').ready(function(){
                         // Add list of <li>
                         $('#listMiddlewareTasks li').each((index, element)=>{
                             storeMiddleware[index]= element.childNodes[0].data.trim();
-                            console.log('Iterator 5:' + index, element.childNodes[0].data.trim());
-                            console.log(JSON.stringify( storeMiddleware ) );
                         });
                         // Save object into localStorage
                         saveTask( TASK_RUNNING , storeMiddleware );
@@ -375,9 +365,6 @@ $('document').ready(function(){
                 }
                 $('#listStartTasks li').each((index, element)=>{
                     storeInitialTask[index]= element.childNodes[0].data.trim();
-                    //storeInitialTask[index]= element.textContent.toString().trim();
-                    console.log('Iterator :' + index, element.childNodes[0].data.trim());
-                    console.log(JSON.stringify( storeInitialTask ) );
                 });
                 saveTask( TASK_INITIAL , storeInitialTask );
                 // Clear input element
