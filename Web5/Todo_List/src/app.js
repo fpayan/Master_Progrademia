@@ -12,6 +12,7 @@ import 'jquery-ui/ui/widgets/sortable';
 import 'jquery-ui/ui/widgets/selectable';
 // https://sweetalert2.github.io
 import Swal from 'sweetalert2';
+import { isRegExp } from 'util';
 
 /**
  * AUTHOR : Francisco Payán <fpayan.calero@gmail.com>
@@ -31,20 +32,23 @@ $('document').ready(function(){
 
     // Function anonimous.
     (function(jq, factory){
-
-        
-        factory.init( $('#listStartTasks'), $('#listMiddlewareTasks'), $('#listEndTasks') );
-        
-        //console.log(factory.ff);
+        // Show data in console browser
+        console.log(factory.copyRight());
+        // Get data of localStores for include into <ul>
         let storeListInitTask = factory.getTaskInitial();
         let storeListEjecutingTask = factory.getTaskRunning();
-
-        console.log('>>> ' + Object.keys(storeListInitTask).length );
-        console.log('>>> ' + Object.keys(storeListEjecutingTask).length );
-        
+        // Contant for know what list load..
+        const ID_INITIAL = 'listInitial';
+        const ID_EXECUTE = 'listExecute';
+        // Initialized all elements where load to list
+        factory.init( $('#listStartTasks'), $('#listMiddlewareTasks'), $('#listEndTasks') );
+        //
+        // ¿ Do have list elements ?
         if(Object.keys(storeListInitTask).length > 0 ){
             // Exits item task initial !!
-
+            factory.refreshTask( ID_INITIAL, storeListInitTask, $('#listStartTasks'), ()=>{
+                console.log('Loaded init list finished..');
+            });
         }else{
             // Not exits item task initial.
 
@@ -52,18 +56,18 @@ $('document').ready(function(){
 
         if(Object.keys(storeListEjecutingTask).length > 0 ){
             // Exits item task executing !!
-
+            factory.refreshTask( ID_EXECUTE, storeListEjecutingTask, $('#listMiddlewareTasks'), ()=>{
+                console.log('Loaded middleware list finished..');
+            });
         }else{
             // Not exits item task executing.
             
         }
-
-
-        //jq('.includeElement').append('<p>Esto se ha incluido</p>');
+        // MANAGER EVENTS
         jq('#btnAddTaskToList').click(function(ev){
             ev.preventDefault();
+            // Create item into <ul id="#listStartTasks">
             factory.createItemTask($('#titleTask'), $('#listStartTasks'));
-            
         });
 
     })($, (function(){
@@ -72,20 +76,25 @@ $('document').ready(function(){
         let count = 0;
         const TASK_INITIAL = 'taskInitial';
         const TASK_RUNNING = 'taskRunning';
-        //
+        // Store Temp initial process
         let storeInitialTask = {};
-        let arrAddInitial = [];
-        //
+        // let arrAddInitial = [];
+        // Store Temp middleware process
         let storeMiddleware = {};
-        let arrAddMiddleware = [];
-        //
-        let storeEndTask = {};
-        let arrAddEnd = [];
+        // let arrAddMiddleware = [];
+        // Store Temp initial process
+        // let storeEndTask = {};
+        // let arrAddEnd = [];
         
         /**
-         * FUNCTIONS
-         * 
+         * FUNCTIONS OF MODULE FACTORY TASK
          */
+
+         /**
+          * @description "Save list initial into localStore"
+          * @param {String} key 
+          * @param {Object} objectList 
+          */
         function saveTask(key, objectList){
             //
             let _key = key || '';
@@ -101,14 +110,18 @@ $('document').ready(function(){
                 localStorage.setItem(_key, JSON.stringify(_objectList));  
                 console.log( `Saved object :  ${JSON.stringify(_objectList)}` );
             }else{
-                console.log(`Don\'t saved object ${_objectList} whit key ${_key}`);
+                console.log(`Don\'t saved object ${JSON.stringify(_objectList)} whit key ${_key}`);
             }
         }
         //End function saveTask(key, objetList)
+
+        /**
+         * @description "Get all list from localStore over key of localStored saved."
+         * @param {String} key 
+         */
         function getAllTask(key){
             let _key = key || '';
-            console.log('KEY : ' + _key);
-            //
+            // TASK_INITIAL or TASK_RUNNING only, another thing return object empty
             switch(_key){
                 case TASK_INITIAL:
                     storeInitialTask = JSON.parse(localStorage.getItem(TASK_INITIAL));
@@ -126,7 +139,61 @@ $('document').ready(function(){
             // End switch(_key)
         }
         // End function getAllTask(key)
-        
+
+        /**
+         * @description "Create init list initial if localStore have data."
+         * @param {Object} obListToLoad 
+         * @param {Element} elementParentToInclude 
+         * @param {Function} call 
+         */
+        function createInitialListFirstLoader(obListToLoad, elementParentToInclude, call){
+            if(typeof obListToLoad === 'object' && Object.keys(obListToLoad).length > 0 ){
+                storeInitialTask = {};
+                // storeMiddleware = {};
+                // Iterate object
+                Object.entries(obListToLoad).forEach(([key, value]) => {
+
+                    elementParentToInclude.append(`<li class="list-group-item d-flex justify-content-between align-items-center item-init">
+                    ${value}`);
+                    storeInitialTask[key] = value;    
+                });
+                // Save
+                saveTask(TASK_INITIAL, obListToLoad )
+
+            }
+            // Possible termined with call function ???
+            call();
+        }
+        // End createInitialListFirstLoader()
+        //
+        /**
+         * @description "Create init list middleware if localStore have data."
+         * @param {Object} obListToLoad 
+         * @param {Element} elementParentToInclude 
+         * @param {Function} call 
+         */
+        function createExecuteListFirstLoader(obListToLoad, elementParentToInclude, call){
+            if(typeof obListToLoad === 'object' && Object.keys(obListToLoad).length > 0 ){
+                // storeInitialTask = {};
+                storeMiddleware = {};
+                // Iterate object
+                Object.entries(obListToLoad).forEach(([key, value]) => {
+
+                    elementParentToInclude.append(`<li class="list-group-item d-flex justify-content-between align-items-center item-init">
+                    ${value}`);
+                    storeMiddleware[key] = value;    
+                });
+                // Save
+                saveTask(TASK_RUNNING, obListToLoad )
+
+            }
+            // Possible termined with call function ???
+            call();
+        }
+        // End createExecuteListFirstLoader()
+
+
+
         /**
          * OBJECT TASK.
          */
@@ -138,39 +205,48 @@ $('document').ready(function(){
                 // Get attribute 'id' of init elements 
                 const initElementMiddlewareById = '#' + initElementMiddleware.attr('id');
                 const initElementEndById = '#' + initElementEnd.attr('id');
-                //console.log('ids', initElementMiddlewareById, initElementEndById);
+                
+                ///////////////////////////////////////////////////
                 /* Added events sortable and cursor al elements */
                 /* ******************************************** */
                 // Initial list new Task create
                 initElemntStart.css({"cursor":"move"}).sortable({
                     connectWith: initElementMiddlewareById, // "#listMiddlewareTasks"
-                    
+                    //
                     receive:(event, ui)=>{
                         event.preventDefault();
                     },
                     stop:(event, ui)=>{
+                        // Clear object
+                        storeInitialTask = {};
+                        //
                         // Load all item of list initial.
-                        $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-init').each((index, elem)=>{
-                            storeInitialTask[index] = elem.textContent.toString().trim();
+                        $('#listStartTasks li').each((index, element)=>{
+                            storeInitialTask[index]= element.childNodes[0].data.trim();
+                            console.log('Iterator 3:' + index, element.childNodes[0].data.trim());
+                            console.log(JSON.stringify( storeInitialTask ) );
                         });
                         // Save object into localStorage
                         saveTask( TASK_INITIAL , storeInitialTask );
                         // Test don't show
-                        console.log('Store Init -> ' + JSON.stringify( storeInitialTask ) );
+                        // console.log('Store STOP Init -> ' + JSON.stringify( storeInitialTask ) );
                     },
                     remove:(event, ui)=>{
+
                         // Remove class item-init the item list <li>
                         ui.item[0].classList = 'list-group-item d-flex justify-content-between align-items-center';
                         // Clear object
                         storeInitialTask = {};
-                        // Add list of <li>
-                        $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-init').each((index, elem)=>{
-                            storeInitialTask[index] = elem.textContent.toString().trim();
+                        //
+                        $('#listStartTasks li').each((index, element)=>{
+                            storeInitialTask[index]= element.childNodes[0].data.trim();
+                            console.log('Iterator 2:' + index, element.childNodes[0].data.trim());
+                            console.log(JSON.stringify( storeInitialTask ) );
                         });
                         // Save object into localStorage
                         saveTask( TASK_INITIAL , storeInitialTask );
                         // Test don't show
-                        console.log('Store Remo Init -> ' + JSON.stringify( storeInitialTask ) );
+                        // console.log('Store Remo Init -> ' + JSON.stringify( storeInitialTask ) );
                         
                     },
                     
@@ -181,27 +257,32 @@ $('document').ready(function(){
                     connectWith: initElementEndById, // "#listEndTasks",
                     //
                     receive:(event, ui)=>{
-                        // event.preventDefault();
+                        //
+                        storeMiddleware = {};
                         // Add class 'item-middleware' on item list
                         ui.item[0].classList = 'list-group-item d-flex justify-content-between align-items-center item-middleware';
                         // Add list of <li>
-                        $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-middleware').each((index, elem)=>{
-                            storeMiddleware[index] = elem.textContent.toString().trim();
+                        $('#listMiddlewareTasks li').each((index, element)=>{
+                            storeMiddleware[index]= element.childNodes[0].data.trim();
+                            console.log('Iterator 5:' + index, element.childNodes[0].data.trim());
+                            console.log(JSON.stringify( storeMiddleware ) );
                         });
                         // Save object into localStorage
-                        saveTask( TASK_INITIAL , storeMiddleware );
+                        saveTask( TASK_RUNNING , storeMiddleware );
                         // Test don't show
                         console.log('Midd_Store recive :' + JSON.stringify(storeMiddleware));
                         
                     },
                     stop:(event, ui)=>{
-                        event.preventDefault();
+                        // event.preventDefault();
                         // Add list of <li>
-                        $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-middleware').each((index, elem)=>{
-                            storeMiddleware[index] = elem.textContent.toString().trim();
+                        $('#listMiddlewareTasks li').each((index, element)=>{
+                            storeMiddleware[index]= element.childNodes[0].data.trim();
+                            console.log('Iterator 6:' + index, element.childNodes[0].data.trim());
+                            console.log(JSON.stringify( storeMiddleware ) );
                         });
                         // Save object into localStorage
-                        saveTask( TASK_INITIAL , storeMiddleware );
+                        saveTask( TASK_RUNNING , storeMiddleware );
                         // Test don't show
                         console.log('Midd_Store Stop -> :' + JSON.stringify(storeMiddleware));
         
@@ -212,63 +293,57 @@ $('document').ready(function(){
                         // Clear object
                         storeMiddleware = {};
                         // Add list of <li>
-                        $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-middleware').each((index, elem)=>{
-                            storeMiddleware[index] = elem.textContent.toString().trim();
+                        $('#listMiddlewareTasks li').each((index, element)=>{
+                            storeMiddleware[index]= element.childNodes[0].data.trim();
+                            console.log('Iterator 5:' + index, element.childNodes[0].data.trim());
+                            console.log(JSON.stringify( storeMiddleware ) );
                         });
                         // Save object into localStorage
-                        saveTask( TASK_INITIAL , storeMiddleware );
+                        saveTask( TASK_RUNNING , storeMiddleware );
                         // Test don't show
-                        console.log('Store Remo Middl -> ' + JSON.stringify( storeMiddleware ) );
+                        // console.log('Store Remo Middl -> ' + JSON.stringify( storeMiddleware ) );
                     },
                 });
                 // Innitial list Task finished
-                // initElementEnd.sortable({
-                //     connectWith: initElementMiddlewareById, // "#listMiddlewareTasks",
-                //     //scroll: false,
-                //     //containment: "parent",
-                //     //cancel:false,
-                //     receive:(event, ui)=>{
-                //         // event.preventDefault();
-                        
-                //         console.log('Me cago en to jquery junto....');
-                //         ui.item[0].classList = 'list-group-item d-flex justify-content-between align-items-center item-end';
-                        
-                //         $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-end').each((index, elem)=>{
-                //             storeEndTask[index] = elem.textContent.toString().trim();
-                //         });
-                //         console.log('Store End recive :' + JSON.stringify(storeEndTask));
-                //     },
-                //     stop:(event, ui)=>{
-                //         event.preventDefault();
-                //         $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-end').each((index, elem)=>{
-                //             storeEndTask[index] = elem.textContent.toString().trim();
-                //         });
-                //         console.log('Store End Stop -> :' + JSON.stringify(storeEndTask));
-                //     },
-                //     remove:(event, ui)=>{
-                //         // event.preventDefault();
-                //         console.log('Remo End -> ' + ui.item[0].classList);
-                //         // ui.item[0].classList = 'list-group-item d-flex justify-content-between align-items-center item-middleware';
-                //         ui.item[0].classList = 'list-group-item d-flex justify-content-between align-items-center';
-                //         storeEndTask = {};
-                //         $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-end').each((index, elem)=>{
-                //             storeEndTask[index] = elem.textContent.toString().trim();
-                //         });
-                //         console.log('Store Remo End -> ' + JSON.stringify( storeEndTask ) );
-                //     },
-                    // activate:(event, ui)=>{
-                    //     ui.sender.draggable();
-                    //     console.dir(ui.item[0]);
-                    // }
-                    
-                // });
+                // codeFake.txt here..
             },
-            // Save Task into 
-            saveTask:()=>{},
-            // Update Task
+            // Load Task into <ul> element the start page
+            // data return of localStored.. 
+            refreshTask:(idOfStore, obListToLoad, elementParentToInclude, call )=>{
+
+                // Two value possible for list, one init second middleware
+                const ID_INITIAL = 'listInitial'; // Refresh init list
+                const ID_EXECUTE = 'listExecute'; // Refresh middleware list
+                //
+                switch(idOfStore){
+                    case ID_INITIAL: 
+                        if(obListToLoad !== null || elementParentToInclude !== null ){
+                            createInitialListFirstLoader(obListToLoad, elementParentToInclude, call);
+                        }
+                        break;
+                    case ID_EXECUTE:
+                            if(obListToLoad !== null || elementParentToInclude !== null ){
+                                createExecuteListFirstLoader(obListToLoad, elementParentToInclude, call);
+                            }
+                        break;
+                    default:
+                        return;
+                }
+            },
+            // Return data of person created..
+            copyRight(){
+                const data = {
+                    createBy: 'Francisco Payán',
+                    description: 'Example of <Todo>',
+                    showPage: 'https://algo'
+                }
+                return data;
+            },
+            // Update Task initial
             getTaskInitial:()=>{
                 return getAllTask(TASK_INITIAL);
             },
+            // Update Task middleware
             getTaskRunning:()=>{
                 return getAllTask(TASK_RUNNING);
             },
@@ -284,46 +359,32 @@ $('document').ready(function(){
                     Swal.fire('Debe de añadir una tarea..');
                     return;
                 }
+                //console.log(JSON.stringify(localStorage.getItem(TASK_INITIAL)));
                 // Get input element value
                 let textTaskNew = inputElement.val();
                 // Template 'li' add of 'ul' dom
                 targetElement.append(`<li class="list-group-item d-flex justify-content-between align-items-center item-init">
                 ${textTaskNew}`);
-                //
-                $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-init').each((index, elem)=>{
-                    storeInitialTask[index]= elem.textContent.toString().trim();
-                    console.log('Initial : ' + JSON.stringify(storeInitialTask));
+                storeInitialTask = {};
+                // 
+                if( Object.keys( JSON.stringify(localStorage.getItem(TASK_INITIAL)) ).length <= 0 ){
+                    localStorage.removeItem(TASK_INITIAL);
+                    console.log('Clearing...');
+                }else{
+
+                }
+                $('#listStartTasks li').each((index, element)=>{
+                    storeInitialTask[index]= element.childNodes[0].data.trim();
+                    //storeInitialTask[index]= element.textContent.toString().trim();
+                    console.log('Iterator :' + index, element.childNodes[0].data.trim());
+                    console.log(JSON.stringify( storeInitialTask ) );
                 });
                 saveTask( TASK_INITIAL , storeInitialTask );
-
-                // Add to text of initial task
-                // arrAddInitial.push(`${textTaskNew}`);
-                // // Store into Object all text of the tasks
-                // arrAddInitial.forEach((item, index)=>{
-                //     storeInitialTask[index]= item.trim();
-                // });
-                // console.log('Initial : ' + JSON.stringify(storeInitialTask));
-
-                // Add event 'click' every item Task created.
-                // targetElement.on('click', function(ev){
-                //     ev.preventDefault();
-                //     // let itemRemove = ev.target.parentNode;
-                //     // $(itemRemove).parent().remove();
-                // });
-                // Clear input text Task
+                // Clear input element
                 inputElement.val("");
             },
-            // Remove 'li' of Task 'ul'
-            removeItemTask:(element)=>{
-                element.click(function(ev){
-                    ev.preventDefault();
-                    element.remove();
-                });
-            },
-            // Marked item who to finalized..
-            markItenTaskFinalized:(element)=>{},
-            
-
+            // More element of Task object here..
+            // End Task inner.
         }
         // Task with actions.
         return TaskFactory;

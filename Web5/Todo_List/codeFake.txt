@@ -1,0 +1,41 @@
+// Innitial list Task finished
+// initElementEnd.sortable({
+//     connectWith: initElementMiddlewareById, // "#listMiddlewareTasks",
+//     //scroll: false,
+//     //containment: "parent",
+//     //cancel:false,
+//     receive:(event, ui)=>{
+//         // event.preventDefault();
+        
+//         console.log('Me cago en to jquery junto....');
+//         ui.item[0].classList = 'list-group-item d-flex justify-content-between align-items-center item-end';
+        
+//         $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-end').each((index, elem)=>{
+//             storeEndTask[index] = elem.textContent.toString().trim();
+//         });
+//         console.log('Store End recive :' + JSON.stringify(storeEndTask));
+//     },
+//     stop:(event, ui)=>{
+//         event.preventDefault();
+//         $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-end').each((index, elem)=>{
+//             storeEndTask[index] = elem.textContent.toString().trim();
+//         });
+//         console.log('Store End Stop -> :' + JSON.stringify(storeEndTask));
+//     },
+//     remove:(event, ui)=>{
+//         // event.preventDefault();
+//         console.log('Remo End -> ' + ui.item[0].classList);
+//         // ui.item[0].classList = 'list-group-item d-flex justify-content-between align-items-center item-middleware';
+//         ui.item[0].classList = 'list-group-item d-flex justify-content-between align-items-center';
+//         storeEndTask = {};
+//         $('li.list-group-item.d-flex.justify-content-between.align-items-center.item-end').each((index, elem)=>{
+//             storeEndTask[index] = elem.textContent.toString().trim();
+//         });
+//         console.log('Store Remo End -> ' + JSON.stringify( storeEndTask ) );
+//     },
+    // activate:(event, ui)=>{
+    //     ui.sender.draggable();
+    //     console.dir(ui.item[0]);
+    // }
+    
+// });
