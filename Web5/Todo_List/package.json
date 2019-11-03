@@ -21,7 +21,6 @@
   "author": "Francisco Payán <fpayan.calero@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "set-value": ">=2.0.1",
     "autoprefixer": "^7.2.5",
     "browser-sync": "^2.26.5",
     "browser-sync-webpack-plugin": "^2.2.2",
