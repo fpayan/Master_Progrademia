@@ -31,7 +31,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
     "exports-loader": "^0.6.4",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.13.1",
     "postcss-loader": "^2.0.10",
     "prettier": "^1.17.1",
     "prettier-package-json": "^2.1.0",
